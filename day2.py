@@ -3,6 +3,7 @@ import numba as nb
 import string
 from collections import defaultdict
 
+### MinHash implementation of day2.
 
 def count_elems(elems):
     elem_set = set(elems)
