@@ -1,8 +1,4 @@
 import numpy as np
-import matplotlib
-matplotlib.use('macosx')
-import matplotlib.pyplot as plt
-
 
 test_data = """"""
 
@@ -40,7 +36,7 @@ class Canvas:
             _id, from_left, from_top, sizex, sizey = textile
             unique = np.unique(self.canvas[from_top:from_top+sizey, from_left:from_left+sizex])
             if unique.shape[0] == 1 and unique[0] == 1:
-                print(_id)
+                return _id
 
 
 
@@ -49,6 +45,4 @@ c.load_textile_data(test_data.split("\n"))
 c.create_canvas()
 c.add_textiles_to_canvas()
 print(c.canvas[c.canvas>=2].shape[0])
-# plt.imshow(c.canvas)
-# plt.show()
-print(c.check_non_overlapping(), True)
+print(c.check_non_overlapping())
