@@ -3,8 +3,6 @@ import numba as nb
 import string
 from collections import defaultdict
 
-inpts = """""".split("\n")
-
 
 def count_elems(elems):
     elem_set = set(elems)
@@ -75,22 +73,13 @@ def compare(arrays):
                 return arrays[i], arrays[j]
     return np.zeros(1, dtype=np.int64), np.zeros(1, dtype=np.int64)
 
-depth = 4
-test_array = to_array(inpts)
-res = check_similarities_and_return_argsort(test_array, 15, depth)
-res = res.astype("uint8").view("|S%s" % depth).flatten()
-uniques, counts = np.unique(res, return_counts=True)
-counts = defaultdict(list)
-for i, string in enumerate(res):
-    counts[string].append(i)
-for key in counts:
-    if len(counts[key]) > 1:
-        result = compare(test_array[counts[key]])
-        if result[0].shape[0] > 1:
-            print("".join([chr(x) for x, y in zip(list(result[0]), list(result[1])) if x == y]))
 
-# print(uniques.shape)
-# print(counts.shape)
-# key = uniques[np.argsort(counts)[-1]]
-# ids = np.where(res == key)[0]
-# print(np.array(inpts)[ids])
+if __name__ == "__main__":
+    from sys import argv
+    f = open(argv[1], "r")
+    lines = [x.strip() for x in f.readlines()]
+    f.close()
+    id_array = to_array(lines)
+    
+    star1 = obtain_counts(lines)
+    star2 = check_similarities_and_return_argsort(id_array, 10, 4)
