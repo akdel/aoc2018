@@ -1,5 +1,8 @@
 import numpy as np
 import datetime as dt
+import matplotlib
+matplotlib.use("macosx")
+import matplotlib.pyplot as plt
 
 
 def parse_guard_lines(lines):
@@ -70,11 +73,13 @@ def filter_single_guard_and_get_max_time(guard_times, guard_id):
     guard.reconstruct_entire_time()
     return np.argmax(np.sum(guard.entire_time, axis=0))
 
+
 def filter_single_guard_and_get_sum(guard_times, guard_id):
     current_guard_details = list(filter((lambda x: True if x.guard_id == guard_id else False), guard_times))
     guard = Guard(current_guard_details)
     guard.reconstruct_entire_time()
     return np.sum(guard.entire_time, axis=0)
+
 
 def find_most_frequent_day_and_its_guard(guard_times):
     ids = list(set([x.guard_id for x in guard_times]))
@@ -82,6 +87,8 @@ def find_most_frequent_day_and_its_guard(guard_times):
     for i in range(len(ids)):
         full_array[i] = filter_single_guard_and_get_sum(guard_times, ids[i])
     idid, _min = np.unravel_index(np.argmax(full_array), full_array.shape)
+    plt.imshow(full_array)
+    plt.show()
     return ids[idid], _min
 
 
