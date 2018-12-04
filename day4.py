@@ -67,14 +67,7 @@ def filter_guards_and_find_max(guards_times):
     return sorted(total_times)[::-1][0]
 
 
-def filter_single_guard_and_get_max_time(guard_times, guard_id):
-    current_guard_details = list(filter((lambda x: True if x.guard_id == guard_id else False), guard_times))
-    guard = Guard(current_guard_details)
-    guard.reconstruct_entire_time()
-    return np.argmax(np.sum(guard.entire_time, axis=0))
-
-
-def filter_single_guard_and_get_sum(guard_times, guard_id):
+def filter_single_guard_and_get_max_array(guard_times, guard_id):
     current_guard_details = list(filter((lambda x: True if x.guard_id == guard_id else False), guard_times))
     guard = Guard(current_guard_details)
     guard.reconstruct_entire_time()
@@ -85,7 +78,7 @@ def find_most_frequent_day_and_its_guard(guard_times):
     ids = list(set([x.guard_id for x in guard_times]))
     full_array = np.zeros((len(ids), 60))
     for i in range(len(ids)):
-        full_array[i] = filter_single_guard_and_get_sum(guard_times, ids[i])
+        full_array[i] = filter_single_guard_and_get_max_array(guard_times, ids[i])
     idid, _min = np.unravel_index(np.argmax(full_array), full_array.shape)
     plt.imshow(full_array)
     plt.show()
@@ -109,10 +102,11 @@ if __name__ == "__main__":
     f = open(argv[1], "r")
     lines = [x.strip() for x in f.readlines()]
     f.close()
+
     sorted_lines = sorted(lines, key=filt_func)
     guard_lines = parse_guard_lines(sorted_lines)
     guard_times = [GuardTimes(x) for x in guard_lines]
     gtime, gid = filter_guards_and_find_max(guard_times)
-    print(filter_single_guard_and_get_max_time(guard_times, gid) * int(gid[1:]))
+    print(np.argmax(filter_single_guard_and_get_max_array(guard_times, gid)) * int(gid[1:]))
     _id, _min = find_most_frequent_day_and_its_guard(guard_times)
     print(int(_id[1:]) * _min)
