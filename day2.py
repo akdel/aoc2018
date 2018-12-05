@@ -62,9 +62,11 @@ def _check_similarities_and_return_argsort(id_array, bins, depth=5):
         res[i] = np.argsort(current_bin_res)[::-1][:depth]
     return res
 
+
 def check_similarities_and_return_argsort(id_array, nbins, depth=4):
     bins = create_random_strings(nbins, id_array.shape[1])
     return _check_similarities_and_return_argsort(id_array, bins, depth=depth)
+
 
 @nb.njit
 def compare(arrays):

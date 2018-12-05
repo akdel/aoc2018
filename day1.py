@@ -1,8 +1,7 @@
-import numpy as np
 
 def parse_input(inpt):
     res = list()
-    for elem in inpt.split("\n"):
+    for elem in inpt:
         if elem.startswith("-"):
             res.append(-1 * int(elem.strip()[1:]))
         elif elem.startswith("+"):
@@ -10,6 +9,7 @@ def parse_input(inpt):
         else:
             continue
     return res
+
 
 def do_once(oper_array, start=None, memory=None):
     if not start and not memory:
@@ -23,7 +23,11 @@ def do_once(oper_array, start=None, memory=None):
             memory.add(start)
     return do_once(oper_array, start=start, memory=memory)
 
-inpt = ""
 
-oper_array = parse_input(inpt)
-print(do_once(oper_array))
+if __name__ == "__main__":
+    from sys import argv
+    f = open(argv[1], "w")
+    lines = [x.strip() for x in f.readlines()]
+    f.close()
+    oper_array = parse_input(lines)
+    print(do_once(oper_array))

@@ -1,8 +1,5 @@
 import numpy as np
 import datetime as dt
-import matplotlib
-matplotlib.use("macosx")
-import matplotlib.pyplot as plt
 
 
 def parse_guard_lines(lines):
@@ -26,9 +23,10 @@ class GuardTimes:
     def _parse_lines(self):
         starts = list()
         stops = list()
-        first_line = self.lines[0].split()
-        self.guard_id = first_line[3]
-        self.day = int(first_line[0].split("-")[-1])
+        first_line = self.lines[0]
+        self.guard_id = first_line.split()[3]
+        date = filt_func(first_line)
+        self.day = (date.month, date.day)
         for line in self.lines:
             line = line.split()
             if "falls" in line:
@@ -80,8 +78,6 @@ def find_most_frequent_day_and_its_guard(guard_times):
     for i in range(len(ids)):
         full_array[i] = filter_single_guard_and_get_max_array(guard_times, ids[i])
     idid, _min = np.unravel_index(np.argmax(full_array), full_array.shape)
-    plt.imshow(full_array)
-    plt.show()
     return ids[idid], _min
 
 
@@ -107,6 +103,6 @@ if __name__ == "__main__":
     guard_lines = parse_guard_lines(sorted_lines)
     guard_times = [GuardTimes(x) for x in guard_lines]
     gtime, gid = filter_guards_and_find_max(guard_times)
-    print(np.argmax(filter_single_guard_and_get_max_array(guard_times, gid)) * int(gid[1:]))
+    print("star 1", np.argmax(filter_single_guard_and_get_max_array(guard_times, gid)) * int(gid[1:]))
     _id, _min = find_most_frequent_day_and_its_guard(guard_times)
-    print(int(_id[1:]) * _min)
+    print("star 2", int(_id[1:]) * _min)

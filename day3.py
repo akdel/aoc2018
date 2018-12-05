@@ -1,6 +1,5 @@
 import numpy as np
 
-test_data = """"""
 
 class Canvas:
     def __init__(self):
@@ -39,10 +38,14 @@ class Canvas:
                 return _id
 
 
-
-c = Canvas()
-c.load_textile_data(test_data.split("\n"))
-c.create_canvas()
-c.add_textiles_to_canvas()
-print(c.canvas[c.canvas>=2].shape[0])
-print(c.check_non_overlapping())
+if __name__ == "__main__":
+    from sys import argv
+    f = open(argv[1], "w")
+    lines = [x.strip() for x in f.readlines()]
+    f.close()
+    c = Canvas()
+    c.load_textile_data(lines)
+    c.create_canvas()
+    c.add_textiles_to_canvas()
+    print(c.canvas[c.canvas>=2].shape[0])
+    print(c.check_non_overlapping())
