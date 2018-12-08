@@ -25,6 +25,22 @@ def compress(seq, seq_pure):
     return seq[mask], seq_pure[mask], seq[mask].shape[0]
 
 
+def _recursive_react(seq1, seq2):
+    if len(seq1) == 0:
+        return [seq2[0]], seq2[1:]
+    elif (seq1[-1].lower() == seq2[0].lower()) and (seq1[-1] != seq2[0]):
+        return seq1[:-1], seq2[1:]
+    else:
+        return seq1 + [seq2[0]], seq2[1:]
+
+
+def recursive(seq2):
+    seq1 = []
+    while len(seq2) != 0:
+        seq1, seq2 = _recursive_react(seq1, seq2)
+    return seq1
+
+
 def do_while(seq, seq_pure):
     last_shape = -1
     current_shape = seq.shape[0]
@@ -50,12 +66,16 @@ if __name__ == "__main__":
     f = open(argv[1], "r")
     text = f.read().strip()
     f.close()
-    seq = np.array(tuple(text.lower()), dtype="|S1").view("uint8")
-    seq_pure = np.array(tuple(text), dtype="|S1").view("uint8")
-    print(do_while(seq, seq_pure).shape)
-    res = list()
-    for i in range(26):
-        letter = chr(ord("a") + i)
-        res.append(remove_letter_and_react(seq, seq_pure, letter).shape[0])
-    print(time.time()-t)
-    print(min(res))
+    # seq = np.array(tuple(text.lower()), dtype="|S1").view("uint8")
+    # seq_pure = np.array(tuple(text), dtype="|S1").view("uint8")
+    # print(do_while(seq, seq_pure).shape)
+    # res = list()
+    text = list(tuple(text))
+    print(len(recursive(text)))
+    
+
+    # for i in range(26):
+    #     letter = chr(ord("a") + i)
+    #     res.append(remove_letter_and_react(seq, seq_pure, letter).shape[0])
+    # print(time.time()-t)
+    # print(min(res))
